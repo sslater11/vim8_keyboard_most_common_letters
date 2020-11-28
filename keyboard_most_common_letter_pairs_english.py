@@ -1,5 +1,8 @@
 #!/bin/env python3
 
+# Toggle between a detailed or simple view of the similar letters table.
+are_similar_letters_simple_view = False
+
 # really lazy way to align lol.
 def get_spacing( num ):
     spacing = ""
@@ -81,11 +84,6 @@ for letter_pair in sorted_letter_pairs:
     print( letter_pair[LETTERS] + "      - " + str(letter_pair[FREQUENCY]) + spacing + str(round(occurance_percent,2)) + "%" )
 
 
-print()
-print()
-print( "----------------------------")
-print( "--- Similar letter pairs ---")
-print( "----------------------------")
 # Find similar letter pairs like "en,  ne" or "de, ed"
 # Add thier frequency together and see if they are really common.
 similar_letter_pairs = {}
@@ -104,9 +102,21 @@ for letter_pair in letter_pairs:
 # Move the most common letter pairs to the top of the list.
 sorted_similar_letter_pairs = sorted(similar_letter_pairs.items(), key=lambda x: x[1], reverse=True)
 
+if are_similar_letters_simple_view:
+    print()
+    print()
+    print( " ----------------------------")
+    print( " --- Similar letter pairs ---")
+    print( " ----------------------------")
+    print("letters |    percent   | total")
+else:
+    print()
+    print()
+    print( "-----------------------------------------------------------------------------------")
+    print( "------------------------------- Similar letter pairs ------------------------------")
+    print( "-----------------------------------------------------------------------------------")
+    print("letters - frequency - percent | letters - frequency - percent | total - total percent")
 
-print("letters - frequency - percent | letters - frequency - percent | total - total percent")
-#print("letters |    percent   | total")
 for letter_pair in sorted_similar_letter_pairs:
     occurance_percent = (letter_pair[FREQUENCY] / total_letter_pairs_counted) * 100
 
@@ -130,18 +140,19 @@ for letter_pair in sorted_similar_letter_pairs:
     str_second_letter_pair_frequency = str( second_letter_pair_frequency) + get_spacing( second_letter_pair_frequency )
     str_total_frequency              = str( total_frequency )             + get_spacing( total_frequency )[4:]
 
-    str_first_letter_pair_percent  = str( format(first_letter_pair_percent,  '.2f') ) + "%   | "
-    str_second_letter_pair_percent = str( format(second_letter_pair_percent, '.2f') ) + "%   | "
-    str_total_percent              = str( format(total_percent,              '.2f'))  + "%"
 
+    if are_similar_letters_simple_view:
+        # A less detailed output
+        str_first_letter_pair_percent  = str( format(first_letter_pair_percent,  '.2f') ) + "%"
+        str_second_letter_pair_percent = str( format(second_letter_pair_percent, '.2f') ) + "% | "
+        str_total_percent              = str( format(total_percent,              '.2f'))  + "%"
+        print( first_letter_pair + ", " + second_letter_pair + "  | " + str_first_letter_pair_percent + ", " + str_second_letter_pair_percent + str_total_percent )
+    else:
+        str_first_letter_pair_percent  = str( format(first_letter_pair_percent,  '.2f') ) + "%   | "
+        str_second_letter_pair_percent = str( format(second_letter_pair_percent, '.2f') ) + "%   | "
+        str_total_percent              = str( format(total_percent,              '.2f'))  + "%"
+        print( first_letter_pair + "      - " + str_first_letter_pair_frequency  + str_first_letter_pair_percent +
+              second_letter_pair + "      - " + str_second_letter_pair_frequency + str_second_letter_pair_percent +
+              str_total_frequency + str_total_percent)
 
-    print( first_letter_pair + "      - " + str_first_letter_pair_frequency  + str_first_letter_pair_percent +
-          second_letter_pair + "      - " + str_second_letter_pair_frequency + str_second_letter_pair_percent +
-          str_total_frequency + str_total_percent)
-
-    # A less detailed output
-    #str_first_letter_pair_percent  = str( format(first_letter_pair_percent,  '.2f') ) + "%"
-    #str_second_letter_pair_percent = str( format(second_letter_pair_percent, '.2f') ) + "% | "
-    #str_total_percent              = str( format(total_percent,              '.2f'))  + "%"
-    #print( first_letter_pair + ", " + second_letter_pair + "  | " + str_first_letter_pair_percent + ", " + str_second_letter_pair_percent + str_total_percent )
 
